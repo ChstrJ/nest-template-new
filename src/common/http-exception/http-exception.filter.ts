@@ -23,6 +23,8 @@ export class HttpExceptionFilter<T> implements ExceptionFilter {
         message = (res as any).message ?? message;
       }
     }
+
+    console.log(exception)
    
     response.status(status).json({
       success: false,

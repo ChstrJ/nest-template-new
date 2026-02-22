@@ -12,10 +12,11 @@ import { ConfigService } from '@nestjs/config';
         return new Kysely<any>({
           dialect: new MysqlDialect({
             pool: createPool({
-              host: config.get('database.mysql.host'),
-              user: config.get('database.mysql.user'),
-              password: config.get('database.mysql.password'),
-              database: config.get('database.mysql.name'),
+              port: config.get('database.mysql.port') || 3306,
+              host: config.get('database.mysql.host') || 'localhost',
+              user: config.get('database.mysql.username') || 'root',
+              password: config.get('database.mysql.password') || '',
+              database: config.get('database.mysql.name') || 'myapp_db',
             }),
           }),
         });
@@ -25,4 +26,4 @@ import { ConfigService } from '@nestjs/config';
   exports: ['DB'],
 })
 
-export class DatabaseModule {}
+export class DatabaseModule { }

@@ -18,14 +18,12 @@ export abstract class BaseRepository<T extends keyof DB> {
     return await this.db
       .selectFrom(this.table)
       .selectAll()
-      .where(this.idColumn as any, '=', id as any)
       .executeTakeFirst();
   }
 
   async deleteById(id: string) {
     return await this.db
       .deleteFrom(this.table)
-      .where(this.idColumn as any, '=', id as any)
       .execute();
   }
 
@@ -33,7 +31,6 @@ export abstract class BaseRepository<T extends keyof DB> {
     return await this.db
       .selectFrom(this.table)
       .selectAll()
-      .where(where)
       .executeTakeFirst();
   }
 
@@ -41,7 +38,6 @@ export abstract class BaseRepository<T extends keyof DB> {
     return await this.db
       .selectFrom(this.table)
       .selectAll()
-      .where(where)
       .execute();
   }
 }
