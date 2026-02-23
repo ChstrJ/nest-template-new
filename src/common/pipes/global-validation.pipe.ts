@@ -8,6 +8,7 @@ export class GlobalValidationPipe extends ValidationPipe {
       transform: true, // auto-transform payloads
       whitelist: true, // remove unknown properties
       forbidNonWhitelisted: true, // throw error on extra props
+      disableErrorMessages: process.env.APP_ENV === 'production' ? true : false,
       exceptionFactory: (errors: ValidationError[]) => {
         const formatted = errors.flatMap(err =>
           Object.entries(err.constraints || {}).map(([type, message]) => ({
