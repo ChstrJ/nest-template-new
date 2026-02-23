@@ -25,12 +25,16 @@ export abstract class BaseRepository<T extends keyof DB> {
     return await this.db
       .selectFrom(this.table)
       .selectAll()
+      // @ts-ignore
+      .where(this.idColumn, '=', id)
       .executeTakeFirst();
   }
 
   async deleteById(id: string) {
     return await this.db
       .deleteFrom(this.table)
+      // @ts-ignore
+      .where(this.idColumn, '=', id)
       .execute();
   }
 
@@ -39,13 +43,16 @@ export abstract class BaseRepository<T extends keyof DB> {
 
     // select columns or all
     if (columns && columns.length > 0) {
+      // @ts-ignore
       query = query.select(columns as any);
     } else {
+      // @ts-ignore
       query = query.selectAll();
     }
 
     // dynamically add where conditions
     Object.entries(where).forEach(([col, value]) => {
+      // @ts-ignore
       query = query.where(col as keyof DB[T], '=', value);
     });
 
@@ -57,13 +64,16 @@ export abstract class BaseRepository<T extends keyof DB> {
 
     // select columns or all
     if (columns && columns.length > 0) {
+      // @ts-ignore
       query = query.select(columns as any);
     } else {
+      // @ts-ignore
       query = query.selectAll();
     }
 
     // dynamically add where conditions
     Object.entries(where).forEach(([col, value]) => {
+      // @ts-ignore
       query = query.where(col as keyof DB[T], '=', value);
     });
 
@@ -96,6 +106,6 @@ export abstract class BaseRepository<T extends keyof DB> {
 
     this.clearBuild();
 
-    return this.db.execute(sql`${sql.raw(queryString, ...bindings)}`);
+    //return this.db.execute(sql`${sql.raw(queryString, ...bindings)}`);
   }
 }
