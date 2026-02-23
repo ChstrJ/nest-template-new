@@ -33,6 +33,7 @@
     "class-validator": "^0.14.3",
     "dotenv": "^17.3.1",
     "kysely": "^0.28.11",
+    "lodash": "^4.17.23",
     "mysql2": "^3.17.4",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1"
