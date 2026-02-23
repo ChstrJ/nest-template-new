@@ -5,6 +5,7 @@ import databaseConfig from './config/database.config';
 import appConfig from './config/app.config';
 import { DatabaseModule } from './database/database.module';
 import { LoggerModule } from './core/logger/logger.module';
+import { HealthModule } from './features/health/health.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { LoggerModule } from './core/logger/logger.module';
       envFilePath: '.env',
       load: [databaseConfig, appConfig],
     }),
+    HealthModule,
     DatabaseModule,
     LoggerModule,
     AccountModule
