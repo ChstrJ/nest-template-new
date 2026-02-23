@@ -1,8 +1,9 @@
-import { Module } from '@nestjs/common';
+import { Module, Global } from '@nestjs/common';
 import { Kysely, MysqlDialect } from 'kysely';
 import { createPool } from 'mysql2';
 import { ConfigService } from '@nestjs/config';
 
+@Global()
 @Module({
   providers: [
     {
