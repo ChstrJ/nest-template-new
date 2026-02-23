@@ -3,12 +3,18 @@ import { Kysely } from 'kysely';
 import { DB } from 'src/database/types';
 
 export abstract class BaseRepository<T extends keyof DB> {
-  protected abstract readonly table: T;
-  protected abstract readonly idColumn: keyof DB[T];
+  protected table: T;
+  protected idColumn: keyof DB[T] = 'id' as any;
 
-  constructor(
-    @Inject('DB') protected readonly db: Kysely<DB>,
-  ) {}
+  constructor(@Inject('DB') protected readonly db: Kysely<DB>) { }
+
+  setTable(table: T) {
+    this.table = table;
+  }
+
+  setIdColumn(column: keyof DB[T]) {
+    this.idColumn = column;
+  }
 
   async findAll() {
     return await this.db.selectFrom(this.table).selectAll().execute();
