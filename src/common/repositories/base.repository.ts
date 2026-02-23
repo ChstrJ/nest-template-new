@@ -34,18 +34,40 @@ export abstract class BaseRepository<T extends keyof DB> {
       .execute();
   }
 
-  async findWhere(where: any) {
-    return await this.db
-      .selectFrom(this.table)
-      .selectAll()
-      .executeTakeFirst();
+  async findWhere(where: Partial<DB[T]>, columns?: (keyof DB[T])[]) {
+    let query = this.db.selectFrom(this.table)
+
+    // select columns or all
+    if (columns && columns.length > 0) {
+      query = query.select(columns as any);
+    } else {
+      query = query.selectAll();
+    }
+
+    // dynamically add where conditions
+    Object.entries(where).forEach(([col, value]) => {
+      query = query.where(col as keyof DB[T], '=', value);
+    });
+
+    return await query.executeTakeFirst();
   }
 
-  async pullWhere(where: any) {
-    return await this.db
-      .selectFrom(this.table)
-      .selectAll()
-      .execute();
+  async pullWhere(where: Partial<DB[T]>, columns?: (keyof DB[T])[]) {
+    let query = this.db.selectFrom(this.table);
+
+    // select columns or all
+    if (columns && columns.length > 0) {
+      query = query.select(columns as any);
+    } else {
+      query = query.selectAll();
+    }
+
+    // dynamically add where conditions
+    Object.entries(where).forEach(([col, value]) => {
+      query = query.where(col as keyof DB[T], '=', value);
+    });
+
+    return await query.execute();
   }
 
   startBuild(statement: string, bindings: any[] = []) {
