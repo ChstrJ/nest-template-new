@@ -24,15 +24,13 @@ export class HttpExceptionFilter<T> implements ExceptionFilter {
       }
     }
 
-    console.log(exception)
-   
     response.status(status).json({
       success: false,
+      path: request.url,
+      timestamp: new Date().getTime(),
       error: {
         code: status,
         message: message,
-        timestamp: new Date().getTime(),
-        path: request.url,
       },
     });
   }

@@ -27,26 +27,10 @@ export class ResponseInterceptor<T> implements NestInterceptor<T, WrappedRespons
           return data;
         }
 
-        // Optional: allow controllers to return { data, meta }
-        if (data && typeof data === 'object' && 'data' in data && 'meta' in data) {
-          return {
-            success: true,
-            data: data.data,
-            meta: {
-              ...data.meta,
-              path: req?.url,
-              timestamp: Date.now(),
-            },
-          };
-        }
-
         return {
           success: true,
-          data,
-          meta: {
-            path: req?.url,
-            timestamp: Date.now(),
-          },
+          path: req?.url,
+          timestamp: Date.now(),
         };
       }),
     );
