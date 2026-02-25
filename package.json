@@ -22,7 +22,8 @@
     "migrate:latest": "knex --knexfile knexfile.ts migrate:latest",
     "migrate:rollback": "knex --knexfile knexfile.ts migrate:rollback",
     "db:types": "kysely-codegen --dialect mysql --out-file src/database/types.ts",
-    "db:refresh": "knex --knexfile knexfile.ts migrate:rollback && knex --knexfile knexfile.ts migrate:latest"
+    "db:refresh": "knex --knexfile knexfile.ts migrate:rollback && knex --knexfile knexfile.ts migrate:latest",
+    "console": "ts-node -r tsconfig-paths/register src/cli.ts"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
@@ -42,6 +43,7 @@
     "kysely": "^0.28.11",
     "lodash": "^4.17.23",
     "mysql2": "^3.17.4",
+    "nest-commander": "^3.20.1",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1"
   },
