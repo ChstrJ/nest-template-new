@@ -8,8 +8,8 @@ export async function up(knex: Knex): Promise<void> {
         table.string('account_password').notNullable();
         table.string('account_role').notNullable();
         table.string('account_status').notNullable();
-        table.integer('created_at').nullable();
-        table.integer('updated_at').nullable();
+        table.dateTime('created_at').nullable();
+        table.dateTime('updated_at').nullable();
     });
 }
 

@@ -17,6 +17,10 @@ export abstract class BaseRepository<T extends keyof DB> {
     this.idColumn = column;
   }
 
+  async insert(data: any) {
+    return await this.db.insertInto(this.table).values(data).execute();
+  }
+
   async findAll() {
     return await this.db.selectFrom(this.table).selectAll().execute();
   }

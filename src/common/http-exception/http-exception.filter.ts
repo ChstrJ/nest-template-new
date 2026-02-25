@@ -54,6 +54,8 @@ export class HttpExceptionFilter<T> implements ExceptionFilter {
       },
     }
 
+    console.log(exception);
+
     response.status(status).json(defaultFormatResponse);
   }
 }

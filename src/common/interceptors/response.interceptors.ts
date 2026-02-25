@@ -5,7 +5,7 @@ import {
   CallHandler,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, timestamp } from 'rxjs/operators';
 
 type WrappedResponse<T> = {
   success: true;
@@ -18,7 +18,7 @@ export class ResponseInterceptor<T> implements NestInterceptor<T, WrappedRespons
   constructor() { }
 
   intercept(context: ExecutionContext, next: CallHandler<T>): Observable<WrappedResponse<T>> {
-    const req = context.switchToHttp().getRequest();
+    const request = context.switchToHttp().getRequest();
 
     return next.handle().pipe(
       map((data: any) => {
@@ -26,11 +26,22 @@ export class ResponseInterceptor<T> implements NestInterceptor<T, WrappedRespons
         if (data && typeof data === 'object' && data.success === true && 'data' in data) {
           return data;
         }
+        // If controller returns { data, meta? }, normalize to wrapped shape.
+        if (data && typeof data === 'object' && 'data' in data) {
+          return {
+            success: true,
+            path: request.url,
+            timestamp: new Date().getTime(),
+            data: data.data,
+            ...(data.meta ? { meta: data.meta } : {}),
+          };
+        }
 
         return {
           success: true,
-          path: req?.url,
-          timestamp: Date.now(),
+          path: request.url,
+          timestamp: new Date().getTime(),
+          data,
         };
       }),
     );
