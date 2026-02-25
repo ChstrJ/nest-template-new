@@ -4,7 +4,6 @@ import {
   ExecutionContext,
   CallHandler,
 } from '@nestjs/common';
-import { Reflector } from '@nestjs/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -16,7 +15,7 @@ type WrappedResponse<T> = {
 
 @Injectable()
 export class ResponseInterceptor<T> implements NestInterceptor<T, WrappedResponse<T>> {
-  constructor(private reflector: Reflector) { }
+  constructor() { }
 
   intercept(context: ExecutionContext, next: CallHandler<T>): Observable<WrappedResponse<T>> {
     const req = context.switchToHttp().getRequest();
@@ -28,26 +27,9 @@ export class ResponseInterceptor<T> implements NestInterceptor<T, WrappedRespons
           return data;
         }
 
-        // Optional: allow controllers to return { data, meta }
-        if (data && typeof data === 'object' && 'data' in data && 'meta' in data) {
-          return {
-            success: true,
-            data: data.data,
-            meta: {
-              ...data.meta,
-              path: req?.url,
-              timestamp: Date.now(),
-            },
-          };
-        }
-
         return {
           success: true,
-          data,
-          meta: {
-            path: req?.url,
-            timestamp: Date.now(),
-          },
+          path: req?.url,
         };
       }),
     );

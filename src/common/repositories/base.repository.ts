@@ -5,6 +5,7 @@ import { DB } from 'src/database/types';
 export abstract class BaseRepository<T extends keyof DB> {
   protected table: T;
   protected idColumn: keyof DB[T] = 'id' as any;
+  protected columns: Array<keyof DB[T]> = ['id'] as any;
   protected builder: { statement: string; bindings: any[] }[] = [];
 
   constructor(@Inject('DB') protected readonly db: Kysely<DB>) { }
@@ -15,6 +16,10 @@ export abstract class BaseRepository<T extends keyof DB> {
 
   setIdColumn(column: keyof DB[T]) {
     this.idColumn = column;
+  }
+
+  setColumns(columns: Array<keyof DB[T]>) {
+    this.columns = columns;
   }
 
   async findAll() {
