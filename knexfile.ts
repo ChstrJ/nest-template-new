@@ -6,6 +6,7 @@ dotenv.config();
 const config: Knex.Config = {
     client: 'mysql2',
     connection: {
+        port: Number(process.env.DATABASE_PORT) ?? 3306,
         host: process.env.DATABASE_HOST,
         user: process.env.DATABASE_USERNAME,
         password: process.env.DATABASE_PASSWORD,
