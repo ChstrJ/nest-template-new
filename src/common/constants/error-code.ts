@@ -30,6 +30,10 @@ export class ErrorCode {
   public static INSUFFICIENT_PERMISSIONS = 'insufficient_permissions';
   public static RESOURCE_LOCKED = 'resource_locked';
   public static DEPENDENCY_FAILURE = 'dependency_failure';
+  public static INVALID_CREDENTIALS = 'invalid_credentials';
+  public static ACCOUNT_NOT_FOUND = 'account_not_found';
+  public static ACCOUNT_ALREADY_EXISTS = 'account_already_exists';
+  public static EXPIRED_REFRESH_TOKEN = 'expired_refresh_token';
 }
 
 // central mapping
@@ -61,6 +65,10 @@ export const errorMap: Record<string, ErrorDefinition> = {
   [ErrorCode.INSUFFICIENT_PERMISSIONS]: { message: "Insufficient permissions for this action" },
   [ErrorCode.RESOURCE_LOCKED]: { message: "Resource is currently locked" },
   [ErrorCode.DEPENDENCY_FAILURE]: { message: "A dependent service or resource failed" },
+  [ErrorCode.INVALID_CREDENTIALS]: { message: "Invalid credentials" },
+  [ErrorCode.ACCOUNT_NOT_FOUND]: { message: "Account does not exist" },
+  [ErrorCode.ACCOUNT_ALREADY_EXISTS]: { message: "Account already exist" },
+  [ErrorCode.EXPIRED_REFRESH_TOKEN]: { message: "Refresh token has expired" },
 };
 
 // simple function to get error definition

@@ -43,3 +43,9 @@ export class ValidationException extends GeneralException {
     super(code, HttpStatus.BAD_REQUEST, { errors });
   }
 }
+
+export class AlreadyExistException extends GeneralException {
+  constructor(code: string, extra?: any) {
+    super(code, HttpStatus.BAD_REQUEST, extra);
+  }
+}
