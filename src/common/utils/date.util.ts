@@ -3,9 +3,25 @@ import utc from "dayjs/plugin/utc"
 
 dayjs.extend(utc)
 
-export const getCurretDate = () => {
-    return dayjs().utc().toDate();
+export const getCurrentUTCDatetime = () => {
+  return dayjs().utc().toDate();
 }
+
+export const getDaysUTCDatetime = (days: number = 7) => {
+  return dayjs().utc().add(days, 'day').toDate();
+};
+
+export const getMinutesUTCDatetime = (minutes: number = 7) => {
+  return dayjs().utc().add(minutes, 'minute').toDate();
+};
+
+export const convertUnixToUTCDatetime = (timestamp: number) => {
+  return dayjs.unix(timestamp).utc().toDate();
+}
+
+export const isTokenExpired = (expiresAt: Date) => {
+  return dayjs.utc().isAfter(dayjs.utc(expiresAt));
+};
 
 // TODO: Change all dates to UTC
 export const getLastMonthRange = () => {
