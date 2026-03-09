@@ -1,5 +1,5 @@
 import { Inject } from '@nestjs/common';
-import { Kysely } from 'kysely';
+import { Kysely, Updateable } from 'kysely';
 import { DB } from 'src/database/types';
 
 export abstract class BaseRepository<T extends keyof DB> {
@@ -7,7 +7,7 @@ export abstract class BaseRepository<T extends keyof DB> {
   protected idColumn: keyof DB[T] = 'id' as any;
   protected builder: { statement: string; bindings: any[] }[] = [];
 
-  constructor(@Inject('DB') protected readonly db: Kysely<DB>) { }
+  constructor(@Inject('DB') protected readonly dbClient: Kysely<DB>) { }
 
   setTable(table: T) {
     this.table = table;
@@ -17,8 +17,17 @@ export abstract class BaseRepository<T extends keyof DB> {
     this.idColumn = column;
   }
 
+  get db() {
+    return this.dbClient;
+  }
+
   async insert(data: any) {
-    return await this.db.insertInto(this.table).values(data).execute();
+    try {
+      return await this.db.insertInto(this.table).values(data).execute();
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
   }
 
   async findAll() {
@@ -60,7 +69,12 @@ export abstract class BaseRepository<T extends keyof DB> {
       query = query.where(col as keyof DB[T], '=', value);
     });
 
-    return await query.executeTakeFirst();
+    try {
+      return await query.executeTakeFirst();
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
   }
 
   async pullWhere(where: Partial<DB[T]>, columns?: (keyof DB[T])[]) {
@@ -81,7 +95,52 @@ export abstract class BaseRepository<T extends keyof DB> {
       query = query.where(col as keyof DB[T], '=', value);
     });
 
-    return await query.execute();
+    try {
+      return await query.execute();
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+  }
+
+  async updateWhere(where: Partial<DB[T]>, set: Partial<Updateable<DB[T]>>) {
+    let query = this.db.updateTable(this.table)
+
+    // dynamically add where conditions
+    Object.entries(where).forEach(([col, value]) => {
+      // @ts-ignore
+      query = query.where(col as keyof DB[T], '=', value);
+    });
+
+    // dynamically add set conditions
+    Object.entries(set).forEach(([col, value]) => {
+      // @ts-ignore
+      query = query.set(col as keyof DB[T], value);
+    });
+
+    try {
+      return await query.execute();
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+  }
+
+  async deleteWhere(where: Partial<DB[T]>) {
+    let query = this.db.deleteFrom(this.table)
+
+    // dynamically add where conditions
+    Object.entries(where).forEach(([col, value]) => {
+      // @ts-ignore
+      query = query.where(col as keyof DB[T], '=', value);
+    });
+
+    try {
+      return await query.execute();
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
   }
 
   startBuild(statement: string, bindings: any[] = []) {
